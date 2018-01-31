@@ -1,3 +1,5 @@
+// For more information about this template visit http://aka.ms/azurebots-node-qnamaker
+
 /*-----------------------------------------------------------------------------
 A simple echo bot for the Microsoft Bot Framework. 
 -----------------------------------------------------------------------------*/
@@ -12,7 +14,7 @@ var server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, function () {
    console.log('%s listening to %s', server.name, server.url); 
 });
-  
+
 // Create chat connector for communicating with the Bot Framework Service
 var connector = new builder.ChatConnector({
     appId: process.env.MicrosoftAppId,
@@ -38,13 +40,13 @@ var bot = new builder.UniversalBot(connector);
 bot.set('storage', tableStorage);
 
 var recognizer = new builder_cognitiveservices.QnAMakerRecognizer({
-                knowledgeBaseId: process.env.QnAKnowledgebaseId, 
+		knowledgeBaseId: process.env.QnAKnowledgebaseId, 
     subscriptionKey: process.env.QnASubscriptionKey});
 
 var basicQnAMakerDialog = new builder_cognitiveservices.QnAMakerDialog({
     recognizers: [recognizer],
-                defaultMessage: 'No match! Try changing the query terms!',
-                qnaThreshold: 0.3}
+		defaultMessage: 'No match! Try changing the query terms!',
+		qnaThreshold: 0.3}
 );
 
 bot.dialog('basicQnAMakerDialog', basicQnAMakerDialog);
@@ -52,13 +54,13 @@ bot.dialog('basicQnAMakerDialog', basicQnAMakerDialog);
 bot.dialog('/', //basicQnAMakerDialog);
 [
     function (session){
-        var qnaKnowledgebaseId = process.env.QnAKnowledgebaseId;
-        var qnaSubscriptionKey = process.env.QnASubscriptionKey;
-        
-        // QnA Subscription Key and KnowledgeBase Id null verification
-        if((qnaSubscriptionKey == null || qnaSubscriptionKey == '') || (qnaKnowledgebaseId == null || qnaKnowledgebaseId == ''))
-            session.send('Please set QnAKnowledgebaseId and QnASubscriptionKey in App Settings. Get them at https://qnamaker.ai.');
-        else
-            session.replaceDialog('basicQnAMakerDialog');
+	var qnaKnowledgebaseId = process.env.QnAKnowledgebaseId;
+	var qnaSubscriptionKey = process.env.QnASubscriptionKey;
+
+	// QnA Subscription Key and KnowledgeBase Id null verification
+	if((qnaSubscriptionKey == null || qnaSubscriptionKey == '') || (qnaKnowledgebaseId == null || qnaKnowledgebaseId == ''))
+	    session.send('Please set QnAKnowledgebaseId and QnASubscriptionKey in App Settings. Get them at https://qnamaker.ai.');
+	else
+	    session.replaceDialog('basicQnAMakerDialog');
     }
 ]);
